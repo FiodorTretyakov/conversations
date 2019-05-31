@@ -5,7 +5,7 @@ class Conversation {
     this._route = [start]
   }
 
-  get current () {
+  get currentId () {
     return this._route[this._route.length - 1]
   }
 
@@ -20,13 +20,24 @@ class Conversation {
 }
 
 let getChatsObject = (fileName) => JSON.parse(fs.readFileSync(fileName, 'utf8'))
+
+let toArray = (obj) => {
+  let result = []
+
+  for (let p in obj) {
+    result.push(obj[p])
+  }
+
+  return result
+}
+
 let getPrefix = (fileName) => fileName.split('.')[0]
 
 // if no start tag, it will throw unhandled exception, because of it is critical piece
 let getStartChat = (chats, prefix) => chats.find(c => isStart(c, prefix))
 
-let getRoutesForward = (id, chats) => chats[id].routes.split('|')
-let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).some(cId => cId === id))
+let getRoutesForward = (id, chats) => chats.find(c => c.id === id).routes.split('|')
+let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).some(r => r.id === id))
 
 let isEndpoint = (c) => c.stage === 'endpoint'
 let isStart = (c, prefix) => c.tag === prefix + '-start'
@@ -37,21 +48,21 @@ let traverse = (chats, id, isBackward) => {
   let result = []
 
   while (stack.length > 0) {
-    let currentChat = stack.pop()
+    let chat = stack.pop()
 
-    let nextRoutes = (isBackward ? getRoutesBackward : getRoutesForward)(currentChat, chats)
-    for (let c of chats.filter(c => currentChat.routes.every(cId => cId !== c) &&
+    let nextRoutes = (isBackward ? getRoutesBackward : getRoutesForward)(chat.currentId, chats)
+    for (let c of chats.filter(c => chat.routes.every(cId => cId !== c) &&
             nextRoutes.some(cId => cId === c))) {
-      currentChat.addRoute(c)
+      chat.addRoute(c)
 
       if ((isBackward && isEndpoint(chats[c])) || (!isBackward && isBye(chats[c]))) {
         if (isBackward) {
           return true
         }
 
-        result.push(currentChat.route)
+        result.push(chat.route)
       } else {
-        stack.push(currentChat)
+        stack.push(chat)
       }
     };
   }
@@ -60,8 +71,8 @@ let traverse = (chats, id, isBackward) => {
 }
 
 module.exports.getAllRoutes = (fileName) => {
-  let chats = getChatsObject(fileName)
+  let chats = toArray(getChatsObject(fileName))
   return traverse(chats, getStartChat(chats, getPrefix(fileName)))
 }
 
-module.exports.isEndpointPassed = (fileName, id) => traverse(getChatsObject(fileName), id, true)
+module.exports.isEndpointPassed = (fileName, id) => traverse(toArray(getChatsObject(fileName)), id, true)
