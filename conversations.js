@@ -28,7 +28,7 @@ let getStartChat = (chats, prefix) =>
     chats.filter(c => chats[c].tag === prefix + startLabel)[0];
 
 let getRoutesForward = (id, chats) => chats[id].routes.split('|');
-let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).indexOf(id) !== -1);
+let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).some(cId => cId === id));
 
 let isSearch
 
@@ -37,21 +37,20 @@ let traverse = (chats, id, getNextRoutes) => {
     let result = [];
 
     while (stack.length > 0) {
-        let c = stack.pop();
+        let chat = stack.pop();
 
         let nextRoutes = getNextRoutes(c.current, chats);
-        for (let chat in chats) {
-            if (c.routes.indexOf(chat) === -1 && nextRoutes.indexOf(chat) !== -1) {
-                c.addRoute(chat);
+        chats.filter(c => chat.routes.indexOf(c) === -1 && nextRoutes.indexOf(c) !== -1). {
+            chat.addRoute(c);
 
-                if (chats[chat].tag === byeLabel) {
-                    result.push(c.route);
-                } else {
-                    stack.push(c);
-                }
+            if (chats[c].tag === byeLabel) {
+                result.push(chat.route);
+            } else {
+                stack.push(chat);
             }
         }
     }
+}
 
-    return result;
+return result;
 }
