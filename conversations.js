@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 const startLabel = '-start';
-const byeLabel = "bye";
+const byeLabel = 'bye';
 
 class conversation {
     constructor(start) {
@@ -30,7 +30,9 @@ let getStartChat = (chats, prefix) =>
 let getRoutesForward = (id, chats) => chats[id].routes.split('|');
 let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).some(cId => cId === id));
 
-let traverse = (chats, id) => {
+let isEndpoint = (c) => c.stage === 'endpoint';
+
+let traverseForward = (chats, id) => {
     let stack = [new conversation(id)];
     let result = [];
 
@@ -43,6 +45,29 @@ let traverse = (chats, id) => {
                 currentChat.addRoute(c);
 
                 if (chats[c].tag === byeLabel) {
+                    result.push(currentChat.route);
+                } else {
+                    stack.push(currentChat);
+                }
+            });
+    }
+
+    return result;
+}
+
+let traverseBackward = (chats, id) => {
+    let stack = [new conversation(id)];
+    let result = [];
+
+    while (stack.length > 0) {
+        let currentChat = stack.pop();
+
+        let nextRoutes = getRoutesBackward(c.current, chats);
+        chats.filter(c => currentChat.routes.indexOf(c) === -1 && nextRoutes.some(cId => cId === c) !== -1)
+            .forEach(c => {
+                currentChat.addRoute(c);
+
+                if (isEndpoint(chats[c])) {
                     result.push(currentChat.route);
                 } else {
                     stack.push(currentChat);
