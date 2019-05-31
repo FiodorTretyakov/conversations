@@ -1,0 +1,12 @@
+{
+    "name": "conversations",
+    "version": "0.0.1",
+    "description": "Find paths in conversations.",
+    "main": "conversations.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Fiodor Tretyakov",
+    "license": "MIT"
+  }
+  
