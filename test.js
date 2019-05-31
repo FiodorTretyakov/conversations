@@ -1,9 +1,15 @@
-const expect = require('chai').expect
+const assert = require('assert')
 const conversations = require('./conversations.js')
 
 describe('conversations', function () {
   it('should reads the file', function () {
-    let chats = conversations.getChatsObject('test.json')
-    expect(chats.length).to.be.equal(2)
+    let chatObj = conversations.getChatsObject('test.json')
+
+    assert(chatObj[1])
+    assert(chatObj[2])
+    assert(chatObj[1].id === '1')
+    assert(chatObj[2].id === '2')
+    assert(chatObj[1].text === 'Hi')
+    assert(chatObj[2].text === 'Bye')
   })
 })
