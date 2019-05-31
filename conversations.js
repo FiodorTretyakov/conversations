@@ -53,21 +53,21 @@ let traverse = (chats, id, isBackward) => {
   let result = []
 
   while (stack.length > 0) {
-    let chat = stack.pop()
+    let currentChat = stack.pop()
 
-    let nextRoutes = (isBackward ? getRoutesBackward : getRoutesForward)(chat.currentId, chats)
-    for (let c of chats.filter(c => chat.routes.every(cr => cr.id !== c.id) &&
-            nextRoutes.some(cr => cr === c.id))) {
-      chat.addRoute(c)
+    let nextRoutes = (isBackward ? getRoutesBackward : getRoutesForward)(currentChat.currentId, chats)
+    for (let chat of chats.filter(c => currentChat.routes.every(cr => cr !== currentChat.currentId) &&
+            nextRoutes.some(cr => cr === currentChat.currentId))) {
+      currentChat.addRoute(chat.id)
 
-      if ((isBackward && isEndpoint(chats[c])) || (!isBackward && isBye(chats[c]))) {
+      if ((isBackward && isEndpoint(chat)) || (!isBackward && isBye(chat))) {
         if (isBackward) {
           return true
         }
 
-        result.push(chat.routes)
+        result.push(currentChat.routes)
       } else {
-        stack.push(chat)
+        stack.push(currentChat)
       }
     };
   }
@@ -79,6 +79,7 @@ module.exports.getChatsObject = getChatsObject
 module.exports.toArray = toArray
 module.exports.getPrefix = getPrefix
 module.exports.getStartChat = getStartChatId
+module.exports.getRoutes = getRoutes
 module.exports.getRoutesForward = getRoutesForward
 module.exports.getRoutesBackward = getRoutesBackward
 module.exports.isEndpoint = isEndpoint
