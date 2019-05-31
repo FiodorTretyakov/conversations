@@ -1,8 +1,8 @@
 const fs = require('fs')
 
 class Conversation {
-  constructor (start) {
-    this._routes = [start]
+  constructor (r) {
+    this._routes = r
   }
 
   get currentId () {
@@ -49,7 +49,7 @@ let getRoutesForward = (id, chats) => getRoutes(chats.find(c => c.id === id))
 let getRoutesBackward = (id, chats) => chats.filter(c => getRoutes(c).some(r => r === id)).map(c => c.id)
 
 let traverse = (chats, id, isBackward) => {
-  let stack = [new Conversation(id)]
+  let stack = [new Conversation([id])]
   let result = []
 
   while (stack.length > 0) {
@@ -58,16 +58,17 @@ let traverse = (chats, id, isBackward) => {
     let nextRoutes = (isBackward ? getRoutesBackward : getRoutesForward)(currentChat.currentId, chats)
     for (let chat of chats.filter(c => currentChat.routes.every(cr => cr !== c.id) &&
             nextRoutes.some(cr => cr === c.id))) {
-      currentChat.addRoute(chat.id)
+      let newChat = new Conversation(currentChat.routes.slice(0))
+      newChat.addRoute(chat.id)
 
       if ((isBackward && isEndpoint(chat)) || (!isBackward && isBye(chat))) {
         if (isBackward) {
           return true
         }
 
-        result.push(currentChat.routes)
+        result.push(newChat.routes)
       } else {
-        stack.push(currentChat)
+        stack.push(newChat)
       }
     };
   }
