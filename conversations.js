@@ -19,7 +19,8 @@ class conversation {
     };
 }
 
-let getChatsObject = (input) => JSON.parse(fs.readFileSync(input, 'utf8'));
+let getChatsObject = (fileName) => JSON.parse(fs.readFileSync(fileName, 'utf8'));
+let getPrefix = (fileName) => fileName.split('.')[0];
 
 //if no start tag, it will throw unhandled exception, because of it is critical piece
 let getStartChat = (chats, prefix) => chats.find(c => isStart(c, prefix));
@@ -31,7 +32,7 @@ let isEndpoint = (c) => c.stage === 'endpoint';
 let isStart = (c, prefix) => c.tag === prefix + '-start';
 let isBye = (c) => c.tag === 'bye';
 
-let traverseForward = (chats, id, isSearchBackward) => {
+let traverse = (chats, id, isBackward) => {
     let stack = [new conversation(id)];
     let result = [];
 
@@ -39,12 +40,12 @@ let traverseForward = (chats, id, isSearchBackward) => {
         let currentChat = stack.pop();
 
         for (let c of chats.filter(c => currentChat.routes.every(cId => cId !== c)
-            && (isSearchBackward ? getRoutesBackward : getRoutesForward)
+            && (isBackward ? getRoutesBackward : getRoutesForward)
                 (getRoutesForward(c.current, chats).some(cId => cId === c) !== -1))) {
             currentChat.addRoute(c);
 
-            if ((isSearchBackward && isEndpoint(chats[c])) || (!isSearchBackward && isBye(chats[c]))) {
-                if (isSearchBackward) {
+            if ((isBackward && isEndpoint(chats[c])) || (!isBackward && isBye(chats[c]))) {
+                if (isBackward) {
                     return true;
                 }
 
@@ -55,5 +56,12 @@ let traverseForward = (chats, id, isSearchBackward) => {
         };
     }
 
-    return isSearchBackward ? false : result;
+    return isBackward ? false : result;
 }
+
+var getAllRoutes = (fileName) => {
+    let chats = getChatsObject(fileName);
+    return traverse(chats, getStartChat(chats, getPrefix(fileName)));
+}
+
+var isEndpointPassed = (fileName, id) => traverse(getChatsObject(fileName), id, true);
