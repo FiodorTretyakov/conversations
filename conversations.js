@@ -30,28 +30,25 @@ let getStartChat = (chats, prefix) =>
 let getRoutesForward = (id, chats) => chats[id].routes.split('|');
 let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).some(cId => cId === id));
 
-let isSearch
-
-let traverse = (chats, id, getNextRoutes) => {
+let traverse = (chats, id) => {
     let stack = [new conversation(id)];
     let result = [];
 
     while (stack.length > 0) {
-        let chat = stack.pop();
+        let currentChat = stack.pop();
 
-        let nextRoutes = getNextRoutes(c.current, chats);
-        chats.filter(c => chat.routes.indexOf(c) === -1 && nextRoutes.some(cId => cId === c) !== -1)
+        let nextRoutes = getRoutesForward(c.current, chats);
+        chats.filter(c => currentChat.routes.indexOf(c) === -1 && nextRoutes.some(cId => cId === c) !== -1)
             .forEach(c => {
-                chat.addRoute(c);
+                currentChat.addRoute(c);
 
                 if (chats[c].tag === byeLabel) {
-                    result.push(chat.route);
+                    result.push(currentChat.route);
                 } else {
-                    stack.push(chat);
+                    stack.push(currentChat);
                 }
             });
     }
-}
 
-return result;
+    return result;
 }
