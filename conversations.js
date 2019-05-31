@@ -59,11 +59,9 @@ let traverse = (chats, id, isBackward) => {
   return isBackward ? false : result
 }
 
-export function getAllRoutes (fileName) {
+module.exports.getAllRoutes = (fileName) => {
   let chats = getChatsObject(fileName)
   return traverse(chats, getStartChat(chats, getPrefix(fileName)))
 }
 
-export function isEndpointPassed (fileName, id) {
-  traverse(getChatsObject(fileName), id, true)
-}
+module.exports.isEndpointPassed = (fileName, id) => traverse(getChatsObject(fileName), id, true)

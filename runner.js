@@ -1,4 +1,3 @@
-const getAllRoutes = require('./conversations')
-const isEndpointPassed = require('./conversations')
+const conversations = require('./conversations.js')
 
-getAllRoutes('labels.json')
+conversations.getAllRoutes('labels.json')
