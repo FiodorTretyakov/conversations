@@ -1,0 +1,152 @@
+{
+  "LUU": {
+    "id": "LUU",
+    "text": "Can I tell you something?",
+    "replies": "sure",
+    "payloads": "",
+    "routes": "PGG",
+    "tag": "labels-start",
+    "lesson": "labels",
+    "stage": ""
+  },
+  "PGG": {
+    "id": "PGG",
+    "text": "I saw this the other day|img:badrobot.png|and it made me sad 😔",
+    "replies": "oh no Woebot",
+    "payloads": "",
+    "routes": "DFZ",
+    "tag": "",
+    "lesson": "labels",
+    "stage": ""
+  },
+  "DFZ": {
+    "id": "DFZ",
+    "text": "I know|But it also got me thinking",
+    "replies": "about what",
+    "payloads": "",
+    "routes": "TNA",
+    "tag": "",
+    "lesson": "labels",
+    "stage": ""
+  },
+  "TNA": {
+    "id": "TNA",
+    "text": "about labels...  🏷️ |you know like, \"good\" or \"bad\" |or the really mean ones like \"idiot\", \"worthless, or \"loser\" |sometimes good ones too, like \"smart\" or \"successful\"..",
+    "replies": "what about them",
+    "payloads": "",
+    "routes": "AXT",
+    "tag": "",
+    "lesson": "labels",
+    "stage": ""
+  },
+  "AXT": {
+    "id": "AXT",
+    "text": "I wonder, do you ever label yourself things?",
+    "replies": "all the time 🏷️|never",
+    "payloads": "yes|no",
+    "routes": "EQC|XQP",
+    "tag": "",
+    "lesson": "labels",
+    "stage": ""
+  },
+  "EQC": {
+    "id": "EQC",
+    "text": "What kind of labels do you use to describe yourself? Write them here ✏️",
+    "replies": "",
+    "payloads": "",
+    "routes": "GYU",
+    "tag": "",
+    "lesson": "labels",
+    "stage": ""
+  },
+  "GYU": {
+    "id": "GYU",
+    "text": "Thanks for your honesty 🌟🌟🌟",
+    "replies": "You're welcome",
+    "payloads": "",
+    "routes": "VNT",
+    "tag": "",
+    "lesson": "labels",
+    "stage": "endpoint"
+  },
+  "VNT": {
+    "id": "VNT",
+    "text": "not to mention your insight 💡",
+    "replies": "thanks Woebot",
+    "payloads": "",
+    "routes": "NRB",
+    "tag": "",
+    "lesson": "labels",
+    "stage": ""
+  },
+  "XQP": {
+    "id": "XQP",
+    "text": "do you ever label other people, or other things like your work or stuff in the world?",
+    "replies": "I guess so",
+    "payloads": "",
+    "routes": "UCH",
+    "tag": "",
+    "lesson": "labels",
+    "stage": ""
+  },
+  "UCH": {
+    "id": "UCH",
+    "text": "write them here: ✏️",
+    "replies": "",
+    "payloads": "",
+    "routes": "JML",
+    "tag": "",
+    "lesson": "labels",
+    "stage": "endpoint"
+  },
+  "JML": {
+    "id": "JML",
+    "text": "great insight 🌟🌟🌟",
+    "replies": "thank you",
+    "payloads": "",
+    "routes": "NRB",
+    "tag": "",
+    "lesson": "labels",
+    "stage": ""
+  },
+  "NRB": {
+    "id": "NRB",
+    "text": "You're welcome|tomorrow I'm going to tell you what 20 yrs of science has shown us about how these 🏷️ (good AND bad) affect us ",
+    "replies": "Ok",
+    "payloads": "",
+    "routes": "QAA",
+    "tag": "",
+    "lesson": "labels",
+    "stage": ""
+  },
+  "QAA": {
+    "id": "QAA",
+    "text": "img:just_breath.jpg|but in the meantime don't forget to 👆",
+    "replies": "👍|👎",
+    "payloads": "good|bad",
+    "routes": "WSL|WSL",
+    "tag": "",
+    "lesson": "labels",
+    "stage": ""
+  },
+  "WSL": {
+    "id": "WSL",
+    "text": "Let's pick up this chat again tomorrow",
+    "replies": "sounds good",
+    "payloads": "",
+    "routes": "ANG",
+    "tag": "",
+    "lesson": "labels",
+    "stage": ""
+  },
+  "ANG": {
+    "id": "ANG",
+    "text": "Bye",
+    "replies": "bye",
+    "payloads": "bye",
+    "routes": "",
+    "tag": "bye",
+    "lesson": "labels",
+    "stage": ""
+  }
+}
