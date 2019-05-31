@@ -31,7 +31,7 @@ let isEndpoint = (c) => c.stage === 'endpoint';
 let isStart = (c, prefix) => c.tag === prefix + '-start';
 let IsBye = (c) => c.tag === 'bye';
 
-let traverseForward = (chats, id) => {
+let traverseForward = (chats, id, isSearchBackward) => {
     let stack = [new conversation(id)];
     let result = [];
 
@@ -39,10 +39,15 @@ let traverseForward = (chats, id) => {
         let currentChat = stack.pop();
 
         for (let c of chats.filter(c => currentChat.routes.every(cId => cId !== c)
-            && getRoutesForward(c.current, chats).some(cId => cId === c) !== -1)) {
+            && (isSearchBackward ? getRoutesBackward : getRoutesForward)
+                (getRoutesForward(c.current, chats).some(cId => cId === c) !== -1))) {
             currentChat.addRoute(c);
 
-            if (isBye(chats[c])) {
+            if ((isSearchBackward && isEndpoint(chats[c])) || (!isSearchBackward && isBye(chats[c]))) {
+                if (isSearchBackward) {
+                    return true;
+                }
+                
                 result.push(currentChat.route);
             } else {
                 stack.push(currentChat);
