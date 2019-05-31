@@ -1,7 +1,7 @@
 {
     "name": "conversations",
     "version": "0.0.1",
-    "description": "Find paths in conversations.",
+    "description": "Find paths in conversations",
     "main": "conversations.js",
     "scripts": {
         "test": "node ./node_modules/mocha/bin/mocha"

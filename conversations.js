@@ -33,18 +33,18 @@ let toArray = (obj) => {
 
 let getPrefix = (fileName) => fileName.split('.')[0]
 
-// if no start tag, it will throw unhandled exception, because of it is critical piece
-let getStartChat = (chats, prefix) => chats.find(c => isStart(c, prefix))
-
-let getRoutesForward = (id, chats) => chats.find(c => c.id === id).routes.split('|')
-
-let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c.id, chats).some(r => r.id === id))
-
 let isEndpoint = (c) => c.stage === 'endpoint'
 
 let isStart = (c, prefix) => c.tag === prefix + '-start'
 
 let isBye = (c) => c.tag === 'bye'
+
+// if no start tag, it will throw unhandled exception, because of it is critical piece
+let getStartChatId = (chats, prefix) => chats.find(c => isStart(c, prefix)).id
+
+let getRoutesForward = (id, chats) => chats.find(c => c.id === id).routes.split('|')
+
+let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c.id, chats).some(r => r.id === id))
 
 let traverse = (chats, id, isBackward) => {
   let stack = [new Conversation(id)]
@@ -76,7 +76,7 @@ let traverse = (chats, id, isBackward) => {
 module.exports.getChatsObject = getChatsObject
 module.exports.toArray = toArray
 module.exports.getPrefix = getPrefix
-module.exports.getStartChat = getStartChat
+module.exports.getStartChat = getStartChatId
 module.exports.getRoutesForward = getRoutesForward
 module.exports.getRoutesBackward = getRoutesBackward
 module.exports.isEndpoint = isEndpoint
@@ -86,7 +86,7 @@ module.exports.traverse = traverse
 
 module.exports.getAllRoutes = (fileName) => {
   let chats = toArray(getChatsObject(fileName))
-  return traverse(chats, getStartChat(chats, getPrefix(fileName)))
+  return traverse(chats, getStartChatId(chats, getPrefix(fileName)))
 }
 
 module.exports.isEndpointPassed = (fileName, id) => traverse(toArray(getChatsObject(fileName)), id, true)
