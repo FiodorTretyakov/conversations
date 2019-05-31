@@ -28,7 +28,7 @@ let getRoutesForward = (id, chats) => chats[id].routes.split('|');
 let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).some(cId => cId === id));
 
 let isEndpoint = (c) => c.stage === 'endpoint';
-let isStart = (c, prefix) => c.tag ===  prefix + '-start';
+let isStart = (c, prefix) => c.tag === prefix + '-start';
 let IsBye = (c) => c.tag === 'bye';
 
 let traverseForward = (chats, id) => {
@@ -38,40 +38,16 @@ let traverseForward = (chats, id) => {
     while (stack.length > 0) {
         let currentChat = stack.pop();
 
-        let nextRoutes = getRoutesForward(c.current, chats);
-        chats.filter(c => currentChat.routes.every(cId => cId !== c) && nextRoutes.some(cId => cId === c) !== -1)
-            .forEach(c => {
-                currentChat.addRoute(c);
+        for (let c of chats.filter(c => currentChat.routes.every(cId => cId !== c)
+            && getRoutesForward(c.current, chats).some(cId => cId === c) !== -1)) {
+            currentChat.addRoute(c);
 
-                if (isBye(chats[c])) {
-                    result.push(currentChat.route);
-                } else {
-                    stack.push(currentChat);
-                }
-            });
-    }
-
-    return result;
-}
-
-let traverseBackward = (chats, id) => {
-    let stack = [new conversation(id)];
-    let result = [];
-
-    while (stack.length > 0) {
-        let currentChat = stack.pop();
-
-        let nextRoutes = getRoutesBackward(c.current, chats);
-        chats.filter(c => currentChat.routes.indexOf(c) === -1 && nextRoutes.some(cId => cId === c) !== -1)
-            .forEach(c => {
-                currentChat.addRoute(c);
-
-                if (isEndpoint(chats[c])) {
-                    result.push(currentChat.route);
-                } else {
-                    stack.push(currentChat);
-                }
-            });
+            if (isBye(chats[c])) {
+                result.push(currentChat.route);
+            } else {
+                stack.push(currentChat);
+            }
+        };
     }
 
     return result;
