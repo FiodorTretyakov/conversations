@@ -22,8 +22,13 @@ class Conversation {
 let getChatsObject = (fileName) => JSON.parse(fs.readFileSync(fileName, 'utf8'))
 let getPrefix = (fileName) => fileName.split('.')[0]
 
-// if no start tag, it will throw unhandled exception, because of it is critical piece
-let getStartChat = (chats, prefix) => chats.find(c => isStart(c, prefix))
+let getStartChat = (chats, prefix) => {
+  for (let c in chats) {
+    if (isStart(c, prefix)) {
+      return c
+    }
+  }
+}
 
 let getRoutesForward = (id, chats) => chats[id].routes.split('|')
 let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).some(cId => cId === id))
