@@ -40,7 +40,7 @@ let traverse = (chats, id, getNextRoutes) => {
         let chat = stack.pop();
 
         let nextRoutes = getNextRoutes(c.current, chats);
-        chats.filter(c => chat.routes.indexOf(c) === -1 && nextRoutes.indexOf(c) !== -1). {
+        chats.filter(c => chat.routes.indexOf(c) === -1 && nextRoutes.some(cId => cId === c) !== -1). {
             chat.addRoute(c);
 
             if (chats[c].tag === byeLabel) {
