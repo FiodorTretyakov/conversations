@@ -6,6 +6,7 @@
         "readonly"
     ],
     "files.exclude": {
-        "node_modules": true
+        "node_modules": true,
+        ".nyc_output": true
     }
 }
