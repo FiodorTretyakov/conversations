@@ -24,26 +24,22 @@ class conversation {
 
 let getChatsObject = (input) => JSON.parse(fs.readFileSync(input, 'utf8'));
 
-let getStartChat = (chats, prefix) => {
-    let startTag = prefix + startLabel;
-    for (let c in chats) {
-        if (chats[c].tag == startTag) {
-            return c;
-        }
-    }
-}
+let getStartChat = (chats, prefix) =>
+    chats.filter(c => chats[c].tag === prefix + startLabel)[0];
 
-let getNextRoutes = (c) => c.routes.split('|');
+let getRoutesForward = (id, chats) => chats[id].routes.split('|');
+let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).indexOf(id) !== -1);
 
-let traverse = (chats, start) => {
-    let stack = [new conversation(start)];
+let isSearch
+
+let traverse = (chats, id, getNextRoutes) => {
+    let stack = [new conversation(id)];
     let result = [];
 
     while (stack.length > 0) {
         let c = stack.pop();
 
-        c.addRoute(c.current);
-        let nextRoutes = getNextRoutes(chats[c]);
+        let nextRoutes = getNextRoutes(c.current, chats);
         for (let chat in chats) {
             if (c.routes.indexOf(chat) === -1 && nextRoutes.indexOf(chat) !== -1) {
                 c.addRoute(chat);
@@ -58,8 +54,4 @@ let traverse = (chats, start) => {
     }
 
     return result;
-}
-
-let isMetEndpointBefore = (chats, id) => {
-
 }
