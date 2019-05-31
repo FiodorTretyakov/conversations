@@ -56,8 +56,8 @@ let traverse = (chats, id, isBackward) => {
     let currentChat = stack.pop()
 
     let nextRoutes = (isBackward ? getRoutesBackward : getRoutesForward)(currentChat.currentId, chats)
-    for (let chat of chats.filter(c => currentChat.routes.every(cr => cr !== currentChat.currentId) &&
-            nextRoutes.some(cr => cr === currentChat.currentId))) {
+    for (let chat of chats.filter(c => currentChat.routes.every(cr => cr !== c.id) &&
+            nextRoutes.some(cr => cr === c.id))) {
       currentChat.addRoute(chat.id)
 
       if ((isBackward && isEndpoint(chat)) || (!isBackward && isBye(chat))) {
