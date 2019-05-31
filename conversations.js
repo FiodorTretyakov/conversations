@@ -2,19 +2,19 @@ const fs = require('fs')
 
 class Conversation {
   constructor (start) {
-    this._route = [start]
+    this._routes = [start]
   }
 
   get currentId () {
-    return this._route[this._route.length - 1]
+    return this._routes[this._routes.length - 1]
   }
 
-  get route () {
-    return this._route
+  get routes () {
+    return this._routes
   }
 
   addRoute (r) {
-    this._route.push(r)
+    this._routes.push(r)
     return this
   };
 }
@@ -63,7 +63,7 @@ let traverse = (chats, id, isBackward) => {
           return true
         }
 
-        result.push(chat.route)
+        result.push(chat.routes)
       } else {
         stack.push(chat)
       }
