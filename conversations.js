@@ -21,15 +21,15 @@ class conversation {
 
 let getChatsObject = (input) => JSON.parse(fs.readFileSync(input, 'utf8'));
 
-let getStartChat = (chats, prefix) =>
-    chats.find(c => isStart(c, prefix));
+//if no start tag, it will throw unhandled exception, because of it is critical piece
+let getStartChat = (chats, prefix) => chats.find(c => isStart(c, prefix));
 
 let getRoutesForward = (id, chats) => chats[id].routes.split('|');
 let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).some(cId => cId === id));
 
 let isEndpoint = (c) => c.stage === 'endpoint';
 let isStart = (c, prefix) => c.tag === prefix + '-start';
-let IsBye = (c) => c.tag === 'bye';
+let isBye = (c) => c.tag === 'bye';
 
 let traverseForward = (chats, id, isSearchBackward) => {
     let stack = [new conversation(id)];
@@ -47,7 +47,7 @@ let traverseForward = (chats, id, isSearchBackward) => {
                 if (isSearchBackward) {
                     return true;
                 }
-                
+
                 result.push(currentChat.route);
             } else {
                 stack.push(currentChat);
@@ -55,5 +55,5 @@ let traverseForward = (chats, id, isSearchBackward) => {
         };
     }
 
-    return result;
+    return isSearchBackward ? false : result;
 }
