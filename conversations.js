@@ -1,4 +1,4 @@
-import fs from 'fs'
+const fs = require('fs')
 
 class Conversation {
   constructor (start) {
@@ -59,9 +59,11 @@ let traverse = (chats, id, isBackward) => {
   return isBackward ? false : result
 }
 
-var getAllRoutes = (fileName) => {
+export function getAllRoutes (fileName) {
   let chats = getChatsObject(fileName)
   return traverse(chats, getStartChat(chats, getPrefix(fileName)))
 }
 
-var isEndpointPassed = (fileName, id) => traverse(getChatsObject(fileName), id, true)
+export function isEndpointPassed (fileName, id) {
+  traverse(getChatsObject(fileName), id, true)
+}

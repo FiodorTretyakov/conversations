@@ -1,3 +1,3 @@
-import conversations from './conversations.js'
+const conversations = require('./conversations')
 
 conversations.getAllRoutes('labels.json')
