@@ -37,7 +37,7 @@ let getPrefix = (fileName) => fileName.split('.')[0]
 let getStartChat = (chats, prefix) => chats.find(c => isStart(c, prefix))
 
 let getRoutesForward = (id, chats) => chats.find(c => c.id === id).routes.split('|')
-let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).some(r => r.id === id))
+let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c.id, chats).some(r => r.id === id))
 
 let isEndpoint = (c) => c.stage === 'endpoint'
 let isStart = (c, prefix) => c.tag === prefix + '-start'
@@ -51,8 +51,8 @@ let traverse = (chats, id, isBackward) => {
     let chat = stack.pop()
 
     let nextRoutes = (isBackward ? getRoutesBackward : getRoutesForward)(chat.currentId, chats)
-    for (let c of chats.filter(c => chat.routes.every(cId => cId !== c) &&
-            nextRoutes.some(cId => cId === c))) {
+    for (let c of chats.filter(c => chat.routes.every(cr => cr.id !== c.id) &&
+            nextRoutes.some(cr => cr.id === c.id))) {
       chat.addRoute(c)
 
       if ((isBackward && isEndpoint(chats[c])) || (!isBackward && isBye(chats[c]))) {
