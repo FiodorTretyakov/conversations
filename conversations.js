@@ -42,9 +42,11 @@ let isBye = (c) => c.tag === 'bye'
 // if no start tag, it will throw unhandled exception, because of it is critical piece
 let getStartChatId = (chats, prefix) => chats.find(c => isStart(c, prefix)).id
 
-let getRoutesForward = (id, chats) => chats.find(c => c.id === id).routes.split('|')
+let getRoutes = (chat) => chat.routes.split('|')
 
-let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c.id, chats).some(r => r.id === id))
+let getRoutesForward = (id, chats) => getRoutes(chats.find(c => c.id === id))
+
+let getRoutesBackward = (id, chats) => chats.filter(c => getRoutes(c).some(r => r === id)).map(c => c.id)
 
 let traverse = (chats, id, isBackward) => {
   let stack = [new Conversation(id)]
@@ -55,7 +57,7 @@ let traverse = (chats, id, isBackward) => {
 
     let nextRoutes = (isBackward ? getRoutesBackward : getRoutesForward)(chat.currentId, chats)
     for (let c of chats.filter(c => chat.routes.every(cr => cr.id !== c.id) &&
-            nextRoutes.some(cr => cr.id === c.id))) {
+            nextRoutes.some(cr => cr === c.id))) {
       chat.addRoute(c)
 
       if ((isBackward && isEndpoint(chats[c])) || (!isBackward && isBye(chats[c]))) {

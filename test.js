@@ -69,7 +69,7 @@ describe('conversations', function () {
     assert(routes2)
     assert.strictEqual(2, routes2.length)
     assert.strictEqual('1', routes2[0])
-    assert.strictEqual('2', routes2[1])
+    assert.strictEqual('3', routes2[1])
 
     let routes1 = conversations.getRoutesBackward('3', array)
     assert(routes1)
