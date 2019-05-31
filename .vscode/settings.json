@@ -1,7 +1,8 @@
 {
     "cSpell.words": [
         "Fiodor",
-        "Tretyakov"
+        "Tretyakov",
+        "readonly"
     ],
     "files.exclude": {
         "node_modules": true
