@@ -37,10 +37,13 @@ let getPrefix = (fileName) => fileName.split('.')[0]
 let getStartChat = (chats, prefix) => chats.find(c => isStart(c, prefix))
 
 let getRoutesForward = (id, chats) => chats.find(c => c.id === id).routes.split('|')
+
 let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c.id, chats).some(r => r.id === id))
 
 let isEndpoint = (c) => c.stage === 'endpoint'
+
 let isStart = (c, prefix) => c.tag === prefix + '-start'
+
 let isBye = (c) => c.tag === 'bye'
 
 let traverse = (chats, id, isBackward) => {
@@ -69,6 +72,17 @@ let traverse = (chats, id, isBackward) => {
 
   return isBackward ? false : result
 }
+
+module.exports.getChatsObject = getChatsObject
+module.exports.toArray = toArray
+module.exports.getPrefix = getPrefix
+module.exports.getStartChat = getStartChat
+module.exports.getRoutesForward = getRoutesForward
+module.exports.getRoutesBackward = getRoutesBackward
+module.exports.isEndpoint = isEndpoint
+module.exports.isStart = isStart
+module.exports.isBye = isBye
+module.exports.traverse = traverse
 
 module.exports.getAllRoutes = (fileName) => {
   let chats = toArray(getChatsObject(fileName))
