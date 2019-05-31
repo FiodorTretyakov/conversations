@@ -22,7 +22,7 @@ class conversation {
 let getChatsObject = (input) => JSON.parse(fs.readFileSync(input, 'utf8'));
 
 let getStartChat = (chats, prefix) =>
-    chats.filter(c => isStart(c, prefix))[0];
+    chats.find(c => isStart(c, prefix));
 
 let getRoutesForward = (id, chats) => chats[id].routes.split('|');
 let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).some(cId => cId === id));
@@ -39,7 +39,7 @@ let traverseForward = (chats, id) => {
         let currentChat = stack.pop();
 
         let nextRoutes = getRoutesForward(c.current, chats);
-        chats.filter(c => currentChat.routes.indexOf(c) === -1 && nextRoutes.some(cId => cId === c) !== -1)
+        chats.filter(c => currentChat.routes.every(cId => cId !== c) && nextRoutes.some(cId => cId === c) !== -1)
             .forEach(c => {
                 currentChat.addRoute(c);
 
