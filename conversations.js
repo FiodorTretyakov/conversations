@@ -1,8 +1,5 @@
 import fs from 'fs';
 
-const startLabel = '-start';
-const byeLabel = 'bye';
-
 class conversation {
     constructor(start) {
         this._route = [start];
@@ -25,12 +22,14 @@ class conversation {
 let getChatsObject = (input) => JSON.parse(fs.readFileSync(input, 'utf8'));
 
 let getStartChat = (chats, prefix) =>
-    chats.filter(c => chats[c].tag === prefix + startLabel)[0];
+    chats.filter(c => isStart(c, prefix))[0];
 
 let getRoutesForward = (id, chats) => chats[id].routes.split('|');
 let getRoutesBackward = (id, chats) => chats.filter(c => getRoutesForward(c, chats).some(cId => cId === id));
 
 let isEndpoint = (c) => c.stage === 'endpoint';
+let isStart = (c, prefix) => c.tag ===  prefix + '-start';
+let IsBye = (c) => c.tag === 'bye';
 
 let traverseForward = (chats, id) => {
     let stack = [new conversation(id)];
@@ -44,7 +43,7 @@ let traverseForward = (chats, id) => {
             .forEach(c => {
                 currentChat.addRoute(c);
 
-                if (chats[c].tag === byeLabel) {
+                if (isBye(chats[c])) {
                     result.push(currentChat.route);
                 } else {
                     stack.push(currentChat);
