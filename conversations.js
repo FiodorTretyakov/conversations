@@ -68,7 +68,8 @@ let traverse = (chats, id, isBackward) => {
     // for the situation when the all available paths was already visited and their number > 1, it will produce
     // unfinished loop. For example, all available routes: 1, 2, 3, 4 were already visited. To avoid it, just need
     // to select one of next routes (the first, for example).
-    let routesToGo = !unvisitedRoutes.length ? [nextRoutes[0]] : unvisitedRoutes
+
+    let routesToGo = unvisitedRoutes.length || isBackward ? unvisitedRoutes : [nextRoutes[0]]
     for (let route of routesToGo) {
       let newChat = new Conversation(currentChat.routes.slice(0))
       newChat.addRoute(route.id)
@@ -105,4 +106,12 @@ module.exports.getAllRoutes = (fileName) => {
   return traverse(chats, getStartChatId(chats, getPrefix(fileName)))
 }
 
-module.exports.isEndpointPassed = (fileName, id) => traverse(toArray(getChatsObject(fileName)), id, true)
+module.exports.isEndpointPassed = (fileName, id) => {
+  let chats = toArray(getChatsObject(fileName))
+
+  if (isEndpoint(chats.find(c => c.id === id))) {
+    return true
+  }
+
+  return traverse(chats, id, true)
+}
