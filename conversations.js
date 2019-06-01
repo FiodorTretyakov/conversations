@@ -55,13 +55,25 @@ let traverse = (chats, id, isBackward) => {
   while (stack.length > 0) {
     let currentChat = stack.pop()
 
-    let nextRoutes = (isBackward ? getRoutesBackward : getRoutesForward)(currentChat.currentId, chats)
-    for (let chat of chats.filter(c => currentChat.routes.every(cr => cr !== c.id) &&
-      nextRoutes.some(cr => cr === c.id))) {
-      let newChat = new Conversation(currentChat.routes.slice(0))
-      newChat.addRoute(chat.id)
+    let nextRoutes = chats
+      .filter(c => (isBackward ? getRoutesBackward : getRoutesForward)(currentChat.currentId, chats)
+        .some(cr => cr === c.id))
 
-      if ((isBackward && isEndpoint(chat)) || (!isBackward && isBye(chat))) {
+    if (!nextRoutes.length) {
+      continue
+    }
+
+    let unvisitedRoutes = nextRoutes.filter(c => currentChat.routes.every(cr => cr !== c.id))
+
+    // for the situation when the all available paths was already visited and their number > 1, it will produce
+    // unfinished loop. For example, all available routes: 1, 2, 3, 4 were already visited. To avoid it, just need
+    // to select one of next routes (the first, for example).
+    let routesToGo = !unvisitedRoutes.length ? [nextRoutes[0]] : unvisitedRoutes
+    for (let route of routesToGo) {
+      let newChat = new Conversation(currentChat.routes.slice(0))
+      newChat.addRoute(route.id)
+
+      if ((isBackward && isEndpoint(route)) || (!isBackward && isBye(route))) {
         if (isBackward) {
           return true
         }
