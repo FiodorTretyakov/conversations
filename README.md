@@ -4,8 +4,8 @@ Find paths in conversations.
 
 ## Features
 
-* get all the routes from starting point to end point, if the next route were already added to path, will not go this way. Example, route 1 links to 2 and 3, route 2 links to 1 only. It will add 2 paths: 1->2->1->3 and 1->3
-* based on route id determine if the was endpoint-route in path. Example, route 2 is endpoint and it links to 3. For the route 3, the output will be true, because of 2 was before. And for the route 2 it will be true too, because of it was already reached.
+* get all the routes from starting point to end point, if the next route were already added to path, will not go this way. Example, route 1 links to 2 and 3, route 2 links to 1 only. It will add 2 paths: `1->2->1->3` and `1->3`;
+* based on route id determine if the was endpoint-route in path. Example, route 2 is endpoint and it links to 3. For the route 3, the output will be true, because of 2 was before. And for the route 2 it will be true too, because of it was already reached;
 
 ## Configuration and Usage
 
