@@ -103,10 +103,35 @@ describe('conversations', function () {
     assert.strictEqual(JSON.stringify(['1', '4', '1', '3', '5', '2']), JSON.stringify(forward[2]))
     assert.strictEqual(JSON.stringify(['1', '3', '5', '2']), JSON.stringify(forward[3]))
 
-    let backwardTrue = conversations.traverse(chats, '2', true)
-    assert(backwardTrue)
+    assert.strictEqual(true, conversations.traverse(chats, '2', true))
+    assert.strictEqual(false, conversations.traverse(chats, '1', true))
+  })
+  it('should get all routes', function () {
+    assert.strictEqual(JSON.stringify(
+      [['1', '2'], ['1', '4', '1', '2'], ['1', '4', '1', '3', '5', '2'], ['1', '3', '5', '2']]),
+    JSON.stringify(conversations.getAllRoutes('test.json')))
+  })
+  it('should check is endpoint passed', function () {
+    assert.strictEqual(true, conversations.isEndpointPassed('test.json', '3'))
+    assert.strictEqual(true, conversations.isEndpointPassed('test.json', '5'))
+  })
+  it('should get current route id from conversation', function () {
+    let c = new conversations.Conversation([1])
+    assert.strictEqual(1, c.currentId)
+  })
+  it('should get routes from conversation', function () {
+    let routes = new conversations.Conversation([1, 2]).routes
 
-    let backwardFalse = conversations.traverse(chats, '1', true)
-    assert(!backwardFalse)
+    assert(routes)
+    assert.strictEqual(2, routes.length)
+    assert.strictEqual(1, routes[0])
+    assert.strictEqual(2, routes[1])
+  })
+  it('should add new route to conversation', function () {
+    let c = new conversations.Conversation([1])
+
+    assert.strictEqual(c, c.addRoute(2))
+    assert.strictEqual(2, c.currentId)
+    assert.strictEqual(JSON.stringify([1, 2]), JSON.stringify(c.routes))
   })
 })

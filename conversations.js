@@ -59,10 +59,6 @@ let traverse = (chats, id, isBackward) => {
       .filter(c => (isBackward ? getRoutesBackward : getRoutesForward)(currentChat.currentId, chats)
         .some(cr => cr === c.id))
 
-    if (!nextRoutes.length) {
-      continue
-    }
-
     let unvisitedRoutes = nextRoutes.filter(c => currentChat.routes.every(cr => cr !== c.id))
 
     // for the situation when the all available paths was already visited and their number > 1, it will produce
@@ -89,6 +85,7 @@ let traverse = (chats, id, isBackward) => {
   return isBackward ? false : result
 }
 
+module.exports.Conversation = Conversation
 module.exports.getChatsObject = getChatsObject
 module.exports.toArray = toArray
 module.exports.getPrefix = getPrefix
