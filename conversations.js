@@ -42,7 +42,7 @@ let isBye = (c) => c.tag === 'bye'
 // if no start tag, it will throw unhandled exception, because of it is critical piece
 let getStartChatId = (chats, prefix) => chats.find(c => isStart(c, prefix)).id
 
-let getRoutes = (chat) => chat.routes.split('|')
+let getRoutes = (chat) => chat.routes.length ? chat.routes.split('|') : []
 
 let getRoutesForward = (id, chats) => getRoutes(chats.find(c => c.id === id))
 

@@ -80,4 +80,21 @@ describe('conversations', function () {
     assert(routes0)
     assert(!routes0.length)
   })
+
+  it('should get routes', function () {
+    let routes0 = conversations.getRoutes({ 'routes': '' })
+
+    assert(routes0)
+    assert(!routes0.length)
+
+    let routes1 = conversations.getRoutes({ 'routes': '1' })
+
+    assert(routes1)
+    assert.strictEqual(1, routes1.length)
+
+    let routes2 = conversations.getRoutes({ 'routes': '1|2' })
+
+    assert(routes2)
+    assert.strictEqual(2, routes2.length)
+  })
 })
